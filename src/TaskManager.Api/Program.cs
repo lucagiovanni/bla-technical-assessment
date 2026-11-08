@@ -1,5 +1,6 @@
 using TaskManager.Api;
 using TaskManager.Api.Authentication;
+using TaskManager.Application.Tasks;
 using TaskManager.Application.Users;
 using TaskManager.Infrastructure;
 
@@ -9,6 +10,11 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<RegisterUser>();
 builder.Services.AddScoped<LoginUser>();
 builder.Services.AddScoped<GetCurrentUser>();
+builder.Services.AddScoped<CreateTask>();
+builder.Services.AddScoped<GetTask>();
+builder.Services.AddScoped<ListTasks>();
+builder.Services.AddScoped<UpdateTask>();
+builder.Services.AddScoped<DeleteTask>();
 
 var connectionString = builder.Configuration.GetConnectionString("TaskManager")
     ?? throw new InvalidOperationException("Connection string 'TaskManager' is required.");
