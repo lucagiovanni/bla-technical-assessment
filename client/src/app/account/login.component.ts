@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../core/auth.service';
-import { messageFrom } from './http-error';
+import { messageFrom } from '../core/http-error';
 
 @Component({
   selector: 'app-login',

@@ -1,3 +1,57 @@
-<section>
-  <h2>Your tasks</h2>
+<section class="tasks">
+  <h2>{{ editingId() ? 'Edit task' : 'New task' }}</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      Title
+      <input type="text" formControlName="title" required />
+    </label>
+    <label>
+      Description
+      <textarea formControlName="description" rows="3"></textarea>
+    </label>
+    <label>
+      Status
+      <select formControlName="status">
+        <option value="Pending">Pending</option>
+        <option value="InProgress">In progress</option>
+        <option value="Completed">Completed</option>
+      </select>
+    </label>
+    <label>
+      Due date
+      <input type="date" formControlName="dueDate" required />
+    </label>
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+    <div class="actions">
+      <button type="submit">{{ editingId() ? 'Save changes' : 'Add task' }}</button>
+      @if (editingId()) {
+        <button type="button" (click)="cancelEdit()">Cancel</button>
+      }
+    </div>
+  </form>
+
+  @if (tasks().length === 0) {
+    <p>No tasks yet.</p>
+  } @else {
+    <ul class="task-list">
+      @for (task of tasks(); track task.id) {
+        <li>
+          <h3>{{ task.title }}</h3>
+          <p>{{ task.description }}</p>
+          <p>{{ statusLabel(task.status) }}</p>
+          <time [attr.datetime]="task.dueDate">{{ task.dueDate }}</time>
+          <div class="actions">
+            <button type="button" (click)="edit(task)">Edit</button>
+            @if (pendingDeleteId() === task.id) {
+              <button type="button" (click)="confirmDelete(task.id)">Confirm delete</button>
+            } @else {
+              <button type="button" (click)="requestDelete(task.id)">Delete</button>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+  }
 </section>

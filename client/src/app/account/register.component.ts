@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
 import { AuthService } from '../core/auth.service';
-import { messageFrom } from './http-error';
+import { messageFrom } from '../core/http-error';
 
 @Component({
   selector: 'app-register',
