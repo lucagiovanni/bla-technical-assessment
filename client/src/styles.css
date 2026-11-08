@@ -1,3 +1,20 @@
+:root {
+  --paper: #f3efe6;
+  --ink: #1f1a17;
+  --muted: #5c534c;
+  --line: #e4dccf;
+  --card: #fffdf8;
+  --accent: #1f4d3a;
+  --accent-strong: #16382a;
+  --danger: #9f1239;
+  --focus: #1f4d3a;
+  --shadow: 0 16px 40px rgba(31, 26, 23, 0.08);
+  color: var(--ink);
+  font-family: "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
 *,
 *::before,
 *::after {
@@ -11,9 +28,20 @@ body {
 }
 
 body {
-  background: #f8fafc;
-  color: #1f2937;
+  background:
+    radial-gradient(circle at top left, rgba(196, 165, 116, 0.18), transparent 28rem),
+    var(--paper);
+  color: var(--ink);
   font-family: "Segoe UI", sans-serif;
   font-size: 16px;
   line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-family: Georgia, "Palatino Linotype", serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }

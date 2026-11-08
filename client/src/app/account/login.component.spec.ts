@@ -22,6 +22,11 @@ describe('LoginComponent', () => {
     await fixture.whenStable();
   });
 
+  it('shows the sign-in card and the registration link', () => {
+    expect(fixture.nativeElement.querySelector('.card h2')?.textContent).toContain('Sign in');
+    expect(fixture.nativeElement.querySelector('a[href="/register"]')?.textContent).toContain('Create an account');
+  });
+
   it('does not sign in until the form is valid', () => {
     fixture.componentInstance.submit();
 

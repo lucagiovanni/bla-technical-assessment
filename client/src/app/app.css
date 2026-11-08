@@ -5,48 +5,138 @@
 
 .topbar {
   align-items: center;
+  background: rgba(255, 253, 248, 0.92);
+  border-bottom: 1px solid var(--line);
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1rem;
   justify-content: space-between;
   padding: 0.75rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .brand {
-  color: inherit;
+  align-items: center;
+  color: var(--ink);
+  display: inline-flex;
+  font-family: Georgia, "Palatino Linotype", serif;
+  font-size: 1.25rem;
   font-weight: 600;
+  gap: 0.65rem;
   min-height: 44px;
   text-decoration: none;
+}
+
+.mark {
+  background: var(--accent);
+  border-radius: 0.45rem;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+  height: 1.35rem;
+  position: relative;
+  width: 1.35rem;
+}
+
+.mark::after {
+  border-bottom: 2px solid #fffdf8;
+  border-right: 2px solid #fffdf8;
+  content: "";
+  height: 0.45rem;
+  left: 0.42rem;
+  position: absolute;
+  top: 0.32rem;
+  transform: rotate(40deg);
+  width: 0.22rem;
 }
 
 nav {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
+  gap: 0.5rem;
+}
+
+.who {
+  color: var(--muted);
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 nav a,
 button {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
   font: inherit;
   font-size: 1rem;
+  justify-content: center;
   min-height: 44px;
+  padding: 0 0.95rem;
+  text-decoration: none;
 }
 
 nav a {
-  align-items: center;
-  color: #1d4ed8;
-  display: inline-flex;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+nav a.nav-primary,
+button {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fffdf8;
+  cursor: pointer;
+}
+
+nav a.nav-primary:hover,
+button:hover {
+  background: var(--accent-strong);
 }
 
 main {
   margin: 0 auto;
-  max-width: 64rem;
-  padding: 0 1rem 2rem;
+  max-width: 72rem;
+  padding: 1.25rem 1rem 2.5rem;
   width: 100%;
 }
 
 :focus-visible {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
+}
+
+@media (max-width: 719px) {
+  .topbar {
+    align-items: stretch;
+  }
+
+  .brand,
+  nav {
+    flex: 1 1 100%;
+  }
+
+  nav {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  nav a,
+  button,
+  .who {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .who,
+  nav button {
+    align-items: center;
+    display: flex;
+    grid-column: 1 / -1;
+    max-width: none;
+  }
 }

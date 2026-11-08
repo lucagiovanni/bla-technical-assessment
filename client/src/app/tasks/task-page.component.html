@@ -1,72 +1,87 @@
 <section class="tasks" [class.is-desktop]="layout() === 'desktop'" [class.is-mobile]="layout() === 'mobile'">
-  <h2>{{ editingId() ? 'Edit task' : 'New task' }}</h2>
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <label>
-      Title
-      <input type="text" formControlName="title" required />
-    </label>
-    <label>
-      Description
-      <textarea formControlName="description" rows="3"></textarea>
-    </label>
-    <div class="pair">
+  <div class="page-head">
+    <h2>Your tasks</h2>
+    <p>Keep the title, status, and due date for work that belongs to you.</p>
+  </div>
+
+  <div class="workspace">
+    <form class="panel" [formGroup]="form" (ngSubmit)="submit()">
+      <h3>{{ editingId() ? 'Edit task' : 'New task' }}</h3>
       <label>
-        Status
-        <select formControlName="status">
-          <option value="Pending">Pending</option>
-          <option value="InProgress">In progress</option>
-          <option value="Completed">Completed</option>
-        </select>
+        Title
+        <input type="text" formControlName="title" required />
       </label>
       <label>
-        Due date
-        <input type="date" formControlName="dueDate" required />
+        Description
+        <textarea formControlName="description" rows="3"></textarea>
       </label>
-    </div>
-    @if (error()) {
-      <p class="error" role="alert">{{ error() }}</p>
-    }
-    <div class="actions">
-      <button type="submit">{{ editingId() ? 'Save changes' : 'Add task' }}</button>
-      @if (editingId()) {
-        <button type="button" (click)="cancelEdit()">Cancel</button>
+      <div class="pair">
+        <label>
+          Status
+          <select formControlName="status">
+            <option value="Pending">Pending</option>
+            <option value="InProgress">In progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </label>
+        <label>
+          Due date
+          <input type="date" formControlName="dueDate" required />
+        </label>
+      </div>
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <div class="actions">
+        <button class="primary" type="submit">{{ editingId() ? 'Save changes' : 'Add task' }}</button>
+        @if (editingId()) {
+          <button class="secondary" type="button" (click)="cancelEdit()">Cancel</button>
+        }
+      </div>
+    </form>
+
+    <div class="list-panel">
+      @if (tasks().length === 0) {
+        <div class="empty">
+          <p>No tasks yet.</p>
+          <p>Add one with the form when you are ready.</p>
+        </div>
+      } @else {
+        <table class="task-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Due date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (task of tasks(); track task.id) {
+              <tr>
+                <td class="title-cell"><span class="cell-label">Title</span>{{ task.title }}</td>
+                <td><span class="cell-label">Description</span>{{ task.description }}</td>
+                <td>
+                  <span class="cell-label">Status</span>
+                  <span class="status" [attr.data-status]="task.status">{{ statusLabel(task.status) }}</span>
+                </td>
+                <td><span class="cell-label">Due date</span><time [attr.datetime]="task.dueDate">{{ task.dueDate }}</time></td>
+                <td>
+                  <div class="actions">
+                    <button class="secondary" type="button" (click)="edit(task)">Edit</button>
+                    @if (pendingDeleteId() === task.id) {
+                      <button class="danger" type="button" (click)="confirmDelete(task.id)">Confirm delete</button>
+                    } @else {
+                      <button class="quiet" type="button" (click)="requestDelete(task.id)">Delete</button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
       }
     </div>
-  </form>
-
-  @if (tasks().length === 0) {
-    <p>No tasks yet.</p>
-  } @else {
-    <table class="task-table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Due date</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (task of tasks(); track task.id) {
-          <tr>
-            <td><span class="cell-label">Title</span>{{ task.title }}</td>
-            <td><span class="cell-label">Description</span>{{ task.description }}</td>
-            <td><span class="cell-label">Status</span>{{ statusLabel(task.status) }}</td>
-            <td><span class="cell-label">Due date</span><time [attr.datetime]="task.dueDate">{{ task.dueDate }}</time></td>
-            <td>
-              <div class="actions">
-                <button type="button" (click)="edit(task)">Edit</button>
-                @if (pendingDeleteId() === task.id) {
-                  <button type="button" (click)="confirmDelete(task.id)">Confirm delete</button>
-                } @else {
-                  <button type="button" (click)="requestDelete(task.id)">Delete</button>
-                }
-              </div>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  }
+  </div>
 </section>

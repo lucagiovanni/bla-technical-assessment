@@ -62,6 +62,8 @@ describe('TaskPageComponent', () => {
 
   it('shows the tasks loaded from the service', () => {
     expect(api.list).toHaveBeenCalled();
+    expect(fixture.nativeElement.querySelector('.status')?.getAttribute('data-status')).toBe('Pending');
+    expect(fixture.nativeElement.querySelector('.status')?.textContent).toContain('Pending');
     expect(fixture.nativeElement.textContent).toContain('Write the brief');
     expect(fixture.nativeElement.textContent).toContain('Demo notes');
     expect(fixture.nativeElement.textContent).toContain('2026-11-09');

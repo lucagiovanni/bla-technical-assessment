@@ -1,12 +1,15 @@
 <header class="topbar">
-  <a class="brand" routerLink="/tasks">Task Manager</a>
+  <a class="brand" routerLink="/tasks">
+    <span class="mark" aria-hidden="true"></span>
+    Task Manager
+  </a>
   <nav>
     @if (auth.isLoggedIn()) {
-      <span>{{ auth.user()?.email }}</span>
+      <span class="who">{{ auth.user()?.email }}</span>
       <button type="button" (click)="signOut()">Sign out</button>
     } @else {
       <a routerLink="/login">Sign in</a>
-      <a routerLink="/register">Create account</a>
+      <a class="nav-primary" routerLink="/register">Create account</a>
     }
   </nav>
 </header>

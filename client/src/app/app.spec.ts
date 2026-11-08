@@ -28,7 +28,7 @@ describe('App', () => {
   it('offers sign in when nobody is signed in', async () => {
     const fixture = await create();
 
-    expect(fixture.nativeElement.querySelector('h1, .brand')?.textContent).toContain('Task Manager');
+    expect(fixture.nativeElement.querySelector('.topbar .brand')?.textContent).toContain('Task Manager');
     expect(fixture.nativeElement.textContent).toContain('Sign in');
     expect(fixture.nativeElement.textContent).not.toContain('Sign out');
   });

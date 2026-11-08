@@ -24,6 +24,12 @@ describe('RegisterComponent', () => {
     await fixture.whenStable();
   });
 
+  it('shows the registration card and the sign-in link', () => {
+    expect(fixture.nativeElement.querySelector('.card h2')?.textContent).toContain('Create an account');
+    expect(fixture.nativeElement.querySelector('a[href="/login"]')?.textContent).toContain('Sign in');
+    expect(fixture.nativeElement.textContent).toContain('At least 8 characters, with a letter and a digit.');
+  });
+
   it('does not register until the form is valid', () => {
     fixture.componentInstance.form.setValue({ email: 'ada@example.com', password: 'short' });
 
