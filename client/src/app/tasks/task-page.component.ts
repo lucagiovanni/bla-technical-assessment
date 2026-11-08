@@ -78,6 +78,10 @@ export class TaskPageComponent implements OnInit {
     this.pendingDeleteId.set(id);
   }
 
+  cancelDelete(): void {
+    this.pendingDeleteId.set(null);
+  }
+
   confirmDelete(id: string): void {
     this.tasksApi
       .delete(id)

@@ -69,10 +69,11 @@
                 <td><span class="cell-label">Due date</span><time [attr.datetime]="task.dueDate">{{ task.dueDate }}</time></td>
                 <td>
                   <div class="actions">
-                    <button class="secondary" type="button" (click)="edit(task)">Edit</button>
                     @if (pendingDeleteId() === task.id) {
-                      <button class="danger" type="button" (click)="confirmDelete(task.id)">Confirm delete</button>
+                      <button class="danger" type="button" (click)="confirmDelete(task.id)">Confirm</button>
+                      <button class="secondary" type="button" (click)="cancelDelete()">Cancel</button>
                     } @else {
+                      <button class="secondary" type="button" (click)="edit(task)">Edit</button>
                       <button class="quiet" type="button" (click)="requestDelete(task.id)">Delete</button>
                     }
                   </div>

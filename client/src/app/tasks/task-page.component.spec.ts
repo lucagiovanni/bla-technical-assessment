@@ -6,6 +6,18 @@ import { TaskItem } from './task.model';
 import { TaskPageComponent } from './task-page.component';
 import { TaskService } from './task.service';
 
+function buttonText(root: ParentNode): string[] {
+  return [...root.querySelectorAll('button')].map((button) => button.textContent?.trim() ?? '');
+}
+
+function clickButton(root: ParentNode, name: string): void {
+  const button = [...root.querySelectorAll('button')].find((item) => item.textContent?.trim() === name);
+  if (!button) {
+    throw new Error(`Missing ${name} button`);
+  }
+  button.click();
+}
+
 describe('TaskPageComponent', () => {
   let fixture: ComponentFixture<TaskPageComponent>;
   const api = {
@@ -127,17 +139,38 @@ describe('TaskPageComponent', () => {
     });
   });
 
-  it('deletes a task after confirmation', () => {
+  it('confirms deletion only for the selected task', () => {
+    const second: TaskItem = { ...existing, id: '2', title: 'Sketch the board' };
+    fixture.componentInstance.tasks.set([existing, second]);
+    fixture.detectChanges();
     api.delete.mockReturnValue(of(undefined));
 
-    fixture.componentInstance.requestDelete('1');
+    const rows = [...fixture.nativeElement.querySelectorAll('tbody tr')] as HTMLElement[];
+    clickButton(rows[0], 'Delete');
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('Confirm delete');
 
-    fixture.componentInstance.confirmDelete('1');
+    expect(buttonText(rows[0])).toEqual(['Confirm', 'Cancel']);
+    expect(buttonText(rows[1])).toEqual(['Edit', 'Delete']);
 
+    clickButton(rows[0], 'Confirm');
+
+    expect(api.delete).toHaveBeenCalledTimes(1);
     expect(api.delete).toHaveBeenCalledWith('1');
     expect(api.list).toHaveBeenCalledTimes(2);
+  });
+
+  it('cancels the delete prompt and leaves the task unchanged', () => {
+    fixture.componentInstance.requestDelete('1');
+    fixture.detectChanges();
+    const row = fixture.nativeElement.querySelector('tbody tr') as HTMLElement;
+
+    clickButton(row, 'Cancel');
+    fixture.detectChanges();
+
+    expect(api.delete).not.toHaveBeenCalled();
+    expect(fixture.componentInstance.pendingDeleteId()).toBeNull();
+    expect(row.textContent).toContain('Write the brief');
+    expect(buttonText(row)).toEqual(['Edit', 'Delete']);
   });
 
   it('shows an API error', async () => {
