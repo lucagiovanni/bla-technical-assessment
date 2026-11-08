@@ -1,5 +1,15 @@
-<main class="shell">
-  <h1>Task Manager</h1>
-  <p>The client sends API requests to <code>{{ apiBase }}</code>, which the dev server proxies to the .NET host.</p>
+<header class="topbar">
+  <a class="brand" routerLink="/tasks">Task Manager</a>
+  <nav>
+    @if (auth.isLoggedIn()) {
+      <span>{{ auth.user()?.email }}</span>
+      <button type="button" (click)="signOut()">Sign out</button>
+    } @else {
+      <a routerLink="/login">Sign in</a>
+      <a routerLink="/register">Create account</a>
+    }
+  </nav>
+</header>
+<main>
   <router-outlet />
 </main>
