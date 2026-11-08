@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<RegisterUser>();
 builder.Services.AddScoped<LoginUser>();
+builder.Services.AddScoped<GetCurrentUser>();
 
 var connectionString = builder.Configuration.GetConnectionString("TaskManager")
     ?? throw new InvalidOperationException("Connection string 'TaskManager' is required.");
