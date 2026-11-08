@@ -3,6 +3,7 @@ import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { messageFrom } from '../core/http-error';
+import { layoutForWidth } from '../layout';
 import { TaskItem, TaskStatus, statusLabel } from './task.model';
 import { TaskService } from './task.service';
 
@@ -20,7 +21,14 @@ export class TaskPageComponent implements OnInit {
   readonly editingId = signal<string | null>(null);
   readonly pendingDeleteId = signal<string | null>(null);
   readonly error = signal('');
+  readonly layout = signal(layoutForWidth(window.innerWidth));
   readonly statusLabel = statusLabel;
+
+  constructor() {
+    const onResize = () => this.layout.set(layoutForWidth(window.innerWidth));
+    window.addEventListener('resize', onResize);
+    this.destroyRef.onDestroy(() => window.removeEventListener('resize', onResize));
+  }
   readonly form = new FormGroup({
     title: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(200)] }),
     description: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(4000)] }),

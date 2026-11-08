@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
+import { layoutForWidth } from '../layout';
 import { TaskItem } from './task.model';
 import { TaskPageComponent } from './task-page.component';
 import { TaskService } from './task.service';
@@ -36,6 +37,29 @@ describe('TaskPageComponent', () => {
     await fixture.whenStable();
   });
 
+  afterEach(() => {
+    fixture.destroy();
+    vi.restoreAllMocks();
+  });
+
+  it('marks the list for the current viewport', () => {
+    const section = fixture.nativeElement.querySelector('.tasks') as HTMLElement;
+    expect(section.classList.contains(`is-${layoutForWidth(window.innerWidth)}`)).toBe(true);
+  });
+
+  it('switches between mobile cards and the desktop table', () => {
+    const width = vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(390);
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.tasks')?.classList.contains('is-mobile')).toBe(true);
+
+    width.mockReturnValue(1024);
+    window.dispatchEvent(new Event('resize'));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.tasks')?.classList.contains('is-desktop')).toBe(true);
+    width.mockRestore();
+  });
+
   it('shows the tasks loaded from the service', () => {
     expect(api.list).toHaveBeenCalled();
     expect(fixture.nativeElement.textContent).toContain('Write the brief');
@@ -45,6 +69,7 @@ describe('TaskPageComponent', () => {
 
   it('shows an empty state', async () => {
     api.list.mockReturnValue(of([]));
+    fixture.destroy();
     fixture = TestBed.createComponent(TaskPageComponent);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -117,6 +142,7 @@ describe('TaskPageComponent', () => {
     api.list.mockReturnValue(
       throwError(() => new HttpErrorResponse({ status: 500, error: { message: 'Tasks could not be loaded.' } })),
     );
+    fixture.destroy();
     fixture = TestBed.createComponent(TaskPageComponent);
     fixture.detectChanges();
     await fixture.whenStable();
